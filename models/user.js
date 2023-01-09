@@ -5,6 +5,8 @@ const { handleSchemaValidateErrors } = require("../utils");
 const EMAIL_REGEXP =
   /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 
+const subscriptionList = ["starter", "pro", "business"];
+
 const userSchema = new Schema(
   {
     password: {
@@ -20,7 +22,7 @@ const userSchema = new Schema(
     },
     subscription: {
       type: String,
-      enum: ["starter", "pro", "business"],
+      enum: subscriptionList,
       default: "starter",
     },
     token: {
@@ -45,9 +47,16 @@ const loginSchema = Joi.object({
   password: Joi.string().min(8).required(),
 });
 
+const updateSubscriptionSchema = Joi.object({
+  subscription: Joi.string()
+    .valid(...subscriptionList)
+    .required(),
+});
+
 const schemas = {
-  signupSchema,
   loginSchema,
+  signupSchema,
+  updateSubscriptionSchema,
 };
 
 module.exports = {

@@ -22,4 +22,11 @@ router.get("/logout", authenticate, ctrlWrapper(ctrl.logout));
 
 router.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent));
 
+router.patch(
+  "/",
+  authenticate,
+  validation(schemas.updateSubscriptionSchema, "missing field subscription"),
+  ctrlWrapper(ctrl.updateSubscription)
+);
+
 module.exports = router;

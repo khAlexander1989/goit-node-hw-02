@@ -1,11 +1,14 @@
-const { BadRequest } = require("http-errors");
+const createHttpError = require("../utils/createHttpError");
 
-function validation(schema, errorMsg) {
+function validation(
+  schema,
+  errorMsg = "Ошибка от Joi или другой библиотеки валидаци"
+) {
   return (req, res, next) => {
     const { error } = schema.validate(req.body);
 
     if (error) {
-      next(new BadRequest(errorMsg));
+      next(createHttpError(400, errorMsg));
     }
     next();
   };

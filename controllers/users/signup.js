@@ -1,10 +1,10 @@
 const { User } = require("../../models/user");
 const bcrypt = require("bcryptjs");
+const gravatar = require("gravatar");
 
 const createHttpError = require("../../utils/createHttpError");
 
 async function signup(req, res) {
-  console.log("signup controller was invoked");
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
@@ -15,10 +15,14 @@ async function signup(req, res) {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  console.log("hashPassword: ", hashPassword);
+  const avatarURL = gravatar.url(email);
 
   try {
-    const newUser = await User.create({ ...req.body, password: hashPassword });
+    const newUser = await User.create({
+      ...req.body,
+      password: hashPassword,
+      avatarURL,
+    });
 
     res.status(200).json({
       user: {

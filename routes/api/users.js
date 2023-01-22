@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { ctrlWrapper } = require("../../middlewares");
+const { ctrlWrapper, upload } = require("../../middlewares");
 const { users: ctrl } = require("../../controllers");
 
 const { schemas } = require("../../models/user");
@@ -27,6 +27,13 @@ router.patch(
   authenticate,
   validation(schemas.updateSubscriptionSchema, "missing field subscription"),
   ctrlWrapper(ctrl.updateSubscription)
+);
+
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  ctrlWrapper(ctrl.updateAvatar)
 );
 
 module.exports = router;

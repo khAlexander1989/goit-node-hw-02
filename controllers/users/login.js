@@ -21,6 +21,10 @@ async function login(req, res) {
     throw createHttpError(401, "Email or password is wrong");
   }
 
+  if (!user.verify) {
+    throw createHttpError(401, "Email not verified.");
+  }
+
   const payload = {
     id: user._id,
   };
@@ -32,8 +36,6 @@ async function login(req, res) {
     { token },
     { new: true }
   );
-
-  console.log("loggedinUser", loggedinUser);
 
   res.status(201).json({
     token: loggedinUser.token,

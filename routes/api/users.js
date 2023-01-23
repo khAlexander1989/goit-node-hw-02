@@ -8,8 +8,6 @@ const { validation, authenticate } = require("../../middlewares");
 
 const router = express.Router();
 
-console.log("ctrl: ", ctrl);
-
 router.post(
   "/signup",
   validation(schemas.signupSchema),
@@ -18,9 +16,20 @@ router.post(
 
 router.post("/login", validation(schemas.loginSchema), ctrlWrapper(ctrl.login));
 
+router.post(
+  "/verify",
+  validation(
+    schemas.resendVerificationEmailSchema,
+    "missing required field email"
+  ),
+  ctrlWrapper(ctrl.resendVerificationEmail)
+);
+
 router.get("/logout", authenticate, ctrlWrapper(ctrl.logout));
 
 router.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent));
+
+router.get("/verify/:verificationToken", ctrlWrapper(ctrl.verifyEmail));
 
 router.patch(
   "/",

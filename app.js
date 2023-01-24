@@ -19,7 +19,6 @@ app.use("/api/users", authRouter);
 app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
-  console.log("Hello world");
   res.status(404).json({ message: "Not found" });
 });
 
